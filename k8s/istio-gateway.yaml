@@ -1,0 +1,42 @@
+# Istio Gateway: opens port 80 on the Istio ingress gateway (the cluster's front door).
+# It only says "accept HTTP traffic"; where it goes is decided by the VirtualServices.
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: ticketing-gateway
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+    - port:
+        number: 80
+        name: http
+        protocol: HTTP
+      hosts:
+        - "*"
+---
+# VirtualService: routing rules for traffic entering through ticketing-gateway.
+# One VirtualService per service, like in the course (servicemesh repo).
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: event-service
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - ticketing-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /api/events
+      route:
+        - destination:
+            host: event-service.default.svc.cluster.local
+            port:
+              number: 80
+      timeout: 10s
+      retries:
+        attempts: 3
+        perTryTimeout: 3s
+        retryOn: 5xx,reset,connect-failure
