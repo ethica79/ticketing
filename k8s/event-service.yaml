@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: event-service
-          image: ethica79/event-service:1.0
+          image: ethica79/event-service:1.1
           ports:
             - name: http
               containerPort: 8080
@@ -55,5 +55,5 @@ spec:
     app: event-service
   ports:
     - name: http
-      port: 8080
+      port: 80
       targetPort: http

@@ -1,0 +1,19 @@
+# Ingress: single entry point of the cluster (NGINX Ingress controller, minikube addon).
+# Routes HTTP requests for host ticketing.info to the right Service based on the URL path.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ticketing-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: ticketing.info
+      http:
+        paths:
+          - path: /api/events
+            pathType: Prefix
+            backend:
+              service:
+                name: event-service
+                port:
+                  number: 80
