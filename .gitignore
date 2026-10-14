@@ -1,0 +1,17 @@
+# Build output and caches (all services)
+build/
+.gradle/
+bin/
+out/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+.settings/
+.project
+.classpath
+nbproject/
+
+# OS
+.DS_Store
